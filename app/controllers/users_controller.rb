@@ -1,5 +1,4 @@
-class UsersController < ActionController::API
-
+class UsersController < ApplicationController
   def create
     user = User.new(user_params)
     if user.save
@@ -15,3 +14,4 @@ class UsersController < ActionController::API
     params.require(:user).permit(:name, :email)
   end
 end
+
