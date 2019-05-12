@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   def create
-    user = User.new(user_params)
+    user = join_access(User.new(user_params))
+
     if user.save
       render json: { status: :created }
     else
@@ -13,5 +14,8 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:name, :email)
   end
-end
 
+  def join_access(user)
+    user.tap { |u| u.accesses << Access.find_by_uuid(params.dig(:user, :uuid)) }
+  end
+end
