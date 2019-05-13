@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::API
-  after_action :handle_cors
+  before_action :handle_cors
 
   private
 
