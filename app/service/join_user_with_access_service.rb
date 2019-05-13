@@ -1,6 +1,11 @@
 class JoinUserWithAccessService
-  def self.call(user, accesses)
-    user.accesses << accesses
-    user.save
+  def self.join(user, uuid)
+    user.tap { |u| u.accesses << accesses(uuid) }
+  end
+
+  private
+
+  def self.accesses(uuid)
+    Access.where(uuid: uuid, user_id: nil)
   end
 end

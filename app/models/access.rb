@@ -3,14 +3,22 @@ class Access < ApplicationRecord
 
   validates :uuid, :path, :date_time, presence: true
 
+  class << self
+    def create(params)
+      access = new(params)
+      access.tap { |a| a.save }
+    end
+
+    def uuid_uniq?(uuid)
+      where(uuid: uuid).limit(1).blank?
+    end
+  end
+
   def initialize(params)
     params[:date_time] = date_time_fixed(params[:date_time])
     user_id = Access.find_by_uuid(params[:uuid])&.user_id
-    super(params.merge({user_id: user_id}))
-  end
 
-  def self.uuid_uniqueness?(uuid)
-    where(uuid: uuid).limit(1).blank?
+    super(params.merge({user_id: user_id}))
   end
 
   private

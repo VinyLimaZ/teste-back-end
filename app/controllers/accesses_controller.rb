@@ -1,6 +1,6 @@
 class AccessesController < ApplicationController
   def verify_uuid
-    if Access.uuid_uniqueness?(params[:uuid])
+    if Access.uuid_uniq?(params[:uuid])
       render json: { status: :bad_request }
     else
       render json: { status: :ok }
