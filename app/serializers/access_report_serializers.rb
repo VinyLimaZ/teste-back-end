@@ -22,8 +22,8 @@ class AccessReportSerializers
   end
 
   def accesses_ordered
-    accesses_to_json.flatten.as_json.sort do |a, b|
-      Date.parse(b['created_at']) <=> Date.parse(a['created_at'])
+    accesses_to_json.flatten.sort do |a, b|
+      b['created_at'] <=> a['created_at']
     end
   end
 
