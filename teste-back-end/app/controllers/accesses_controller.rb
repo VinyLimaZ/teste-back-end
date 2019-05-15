@@ -7,7 +7,10 @@ class AccessesController < ApplicationController
     end
   end
 
-  def index; end
+  def index
+    access_report = AccessReportSerializers.call
+    render json: access_report, status: :ok
+  end
 
   def create
     access = Access.new(access_params)

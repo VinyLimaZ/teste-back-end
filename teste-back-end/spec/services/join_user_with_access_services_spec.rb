@@ -1,16 +1,15 @@
-describe JoinUserWithAccessService do
-  include ActiveSupport::Testing::TimeHelpers
+describe JoinUserWithAccessServices do
   describe '.call' do
     context 'if the contact is valid' do
-      let(:user) { build(:user) }
       let(:uuid) { SecureRandom.uuid }
+      let(:user) { build(:user, uuid: uuid) }
       before do
         5.times do |t|
           travel(t.minute) do
             Access.create(attributes_for(:access, uuid: uuid))
           end
         end
-        described_class.join(user, uuid).save
+        described_class.join(user).save
       end
 
       it 'join all previous access to it' do

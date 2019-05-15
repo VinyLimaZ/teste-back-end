@@ -1,5 +1,7 @@
-class JoinUserWithAccessService
-  def self.join(user, uuid)
+class JoinUserWithAccessServices
+  def self.join(user)
+    uuid = user.uuid
+
     user.tap { |u| u.accesses << accesses(uuid) }
   end
 

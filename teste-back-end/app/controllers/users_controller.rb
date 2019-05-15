@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   def create
-    user = JoinUserWithAccessService.join(User.new(user_params), uuid_param))
+    user = JoinUserWithAccessServices.join(User.new(user_params))
 
     if user.save
       render json: { status: :created }
@@ -12,10 +12,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email)
-  end
-
-  def uuid_param
-    params.require(:user).permit(:uuid)
+    params.require(:user).permit(:name, :email, :uuid)
   end
 end

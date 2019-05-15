@@ -4,11 +4,14 @@ describe Access do
   describe '.new' do
     describe 'when date time is valid' do
       context 'fill the date_time attr' do
-        let(:access_params) { attributes_for(:access) }
-        let(:time) { Time.zone.at(1557773771343 / 1000) }
-        subject { described_class.new(access_params).date_time }
+        let(:time) { Time.current }
+        subject do
+          travel_to(time) do
+            described_class.new(attributes_for(:access)).date_time
+          end
+        end
 
-        it { is_expected.to eq time }
+        it { is_expected.to be_within(1.seconds).of(time) }
       end
     end
   end
