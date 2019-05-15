@@ -14,3 +14,8 @@ COPY Gemfile.lock /test-backend/Gemfile.lock
 RUN bundle install
 
 COPY . /test-backend
+
+COPY entrypoint.sh /usr/bin/
+RUN chmod u+x /usr/bin/entrypoint.sh
+EXPOSE 3000
+ENTRYPOINT ["entrypoint.sh"]
