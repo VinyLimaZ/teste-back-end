@@ -9,6 +9,7 @@ class AccessesController < ApplicationController
 
   def index
     access_report = AccessReportSerializers.call
+
     render json: access_report, status: :ok
   end
 

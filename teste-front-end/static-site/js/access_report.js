@@ -112,24 +112,22 @@ function sendFormData(form) {
     });
 }
 
-function accessReportJSONParser() {
+function accessReportHTMLBuilder() {
     fetch('http://localhost:3000/access_report.json')
         .then(function (response) {
             return response.json();
         }).then(function (jsonParsed) {
-            var tbody = $('#access_report_body')
+            var tbody = $('#access_report_body');
             var html = '';
 
-            for (var i = 0; i < jsonParsed.length; i++)
-                debugger;
 
+            for (var i = 0; i < jsonParsed.length; i++) {
+                html = html + '<tr><td>' + jsonParsed[i]['user'] + '</td>' +
+                    '<td>' + jsonParsed[i]['path'] + '</td>' +
+                    '<td>' + moment(jsonParsed[0]['date_time']).format('DD[/]MM[/]YYYY h:mm'); + '</td></tr>'
+            }
             tbody.html(html);
         });
-}
-
-function accessReportHTMLBuilder() {
-    var jsonParsed = accessReportJSONParser();
-    //for ();
 }
 
 // Register current page path
@@ -146,7 +144,7 @@ $(document).ready(function () {
     var date = new Date().getTime();
 
     if (pathName == '/access_report.html') {
-        accessReportJSONParser();
+        accessReportHTMLBuilder();
     } else {
         sendAccessData(uuid, pathName, date);
     }
