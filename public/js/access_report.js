@@ -1,4 +1,4 @@
-// usuario acessa uma pagina 
+// usuario acessa uma pagina
 // lib olha os cookies e gera um UUID caso esteja em branco, caso tenha dados goto 6
 // ajax verifica no backend se o UUID é unico
 // Se não for gera um novo UUID e verifica novamente até receber um positivo
@@ -124,7 +124,7 @@ function accessReportHTMLBuilder() {
             for (var i = 0; i < jsonParsed.length; i++) {
                 html = html + '<tr><td>' + jsonParsed[i]['user'] + '</td>' +
                     '<td>' + jsonParsed[i]['path'] + '</td>' +
-                    '<td>' + moment(jsonParsed[0]['date_time']).format('DD[/]MM[/]YYYY h:mm'); + '</td></tr>'
+                    '<td>' + moment(jsonParsed[i]['date_time']).format('DD[/]MM[/]YYYY h:mm'); + '</td></tr>'
             }
             tbody.html(html);
         });
