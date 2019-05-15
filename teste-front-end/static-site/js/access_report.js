@@ -33,23 +33,7 @@ function getCookie(cname) {
     return "";
 }
 
-function getCookieUUID() {
-    return getCookie('uuid');
-}
-
-function setCookieUUID() {
-    var uuid;
-    var date = new Date();
-    date.setTime(date.getTime() + (1000 * 24 * 60 * 60 * 1000));
-    var expirationDate = date.toUTCString();
-
-    do {
-        uuid = createUUID();
-    } while (verifyUUID(uuid) == false);
-
-    document.cookie = "uuid=" + uuid + ";" + "expires=" + expirationDate + ";path=/";
-}
-
+// ajax request to verify the UUID uniqueness
 function verifyUUID(uuid) {
     // ajax to verify if uuid is valid
     $.ajax({
@@ -69,6 +53,24 @@ function verifyUUID(uuid) {
     });
 }
 
+function getCookieUUID() {
+    return getCookie('uuid');
+}
+
+// a setter that verifies if the UUID is really uniq (double check for race condition and corner cases) and saves on the cookies
+function setCookieUUID() {
+    var uuid;
+    var date = new Date();
+    date.setTime(date.getTime() + (1000 * 24 * 60 * 60 * 1000));
+    var expirationDate = date.toUTCString();
+
+    do {
+        uuid = createUUID();
+    } while (verifyUUID(uuid) == false);
+
+    document.cookie = "uuid=" + uuid + ";" + "expires=" + expirationDate + ";path=/";
+}
+
 function sendAccessData(uuid, pathName, dateTime) {
     $.ajax({
         type: 'POST',
@@ -81,7 +83,7 @@ function sendAccessData(uuid, pathName, dateTime) {
             path: pathName
         },
         success: function () {
-            return true;
+            console.log('Registro criado com sucesso');
         },
         error: function (jqxhr) {
             console.log('Registro não realizado, favor verificar' + jqxhr.responseText);
@@ -104,13 +106,35 @@ function sendFormData(form) {
             $('#user_email').val('');
         },
         error: function (jqxhr) {
-            debugger;
             $('#response_text').text(jqxhr.responseText);
             $('#user_email').val('');
         }
     });
 }
 
+function accessReportJSONParser() {
+    fetch('http://localhost:3000/access_report.json')
+        .then(function (response) {
+            return response.json();
+        }).then(function (jsonParsed) {
+            var tbody = $('#access_report_body')
+            var html = '';
+
+            for (var i = 0; i < jsonParsed.length; i++)
+                debugger;
+
+            tbody.html(html);
+        });
+}
+
+function accessReportHTMLBuilder() {
+    var jsonParsed = accessReportJSONParser();
+    //for ();
+}
+
+// Register current page path
+// If the user never accessed the page, he/she doesn't have a cookie with UUID so we create a new one;
+// After this we send the UUID to the API to register the access
 $(document).ready(function () {
     var pathName = window.location.pathname;
 
@@ -120,10 +144,16 @@ $(document).ready(function () {
 
     var uuid = getCookieUUID();
     var date = new Date().getTime();
-    sendAccessData(uuid, pathName, date);
+
+    if (pathName == '/access_report.html') {
+        accessReportJSONParser();
+    } else {
+        sendAccessData(uuid, pathName, date);
+    }
+
 });
 
-
+// function to make the form an assynchronous request to handle the response
 $(function () {
     var form = $('#new_user');
     var uuidInput = $('#user_uuid')
