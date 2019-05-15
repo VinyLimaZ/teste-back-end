@@ -143,7 +143,7 @@ $(document).ready(function () {
     var uuid = getCookieUUID();
     var date = new Date().getTime();
 
-    if (pathName == '/access_report.html') {
+	if (pathName == '/access_report.html' || pathName == '/') {
         accessReportHTMLBuilder();
     } else {
         sendAccessData(uuid, pathName, date);
