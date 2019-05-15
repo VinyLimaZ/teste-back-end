@@ -4,9 +4,14 @@ pt-BR:
       user:
         name: Nome
         email: E-mail
+        uuid: Código único universal
     errors:
       models:
         user:
           attributes:
             email:
               taken: já registrado, favor selecionar outro
+            uuid:
+              taken: já registrado! Somente é aceito um registro por navegador
+
+
